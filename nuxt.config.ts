@@ -10,7 +10,20 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
   devtools: { enabled: true },
 
-  modules: ['@nuxtjs/seo', '@nuxt/eslint'],
+  // Individual SEO modules rather than the `@nuxtjs/seo` meta-package — it
+  // also bundles `nuxt-og-image`, which pulls in `sharp` as a hard (non-
+  // optional) dependency and breaks `npm ci` on CI runners whose platform
+  // doesn't match the lockfile's native-binary selection. We don't use
+  // generated OG images (see `ogImage` meta below), so it's dead weight.
+  modules: [
+    'nuxt-site-config',
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots',
+    'nuxt-schema-org',
+    'nuxt-seo-utils',
+    'nuxt-link-checker',
+    '@nuxt/eslint',
+  ],
 
   // Subfolders under app/components/ are for organization only, not naming
   // namespaces — keep bare component names (<AppHeader>, not <LayoutAppHeader>).
@@ -55,13 +68,6 @@ export default defineNuxtConfig({
     name: BRAND,
     description: texts.meta.description,
     defaultLocale: 'en',
-  },
-
-  // Social preview image is the org's real GitHub avatar (set via useSeoMeta
-  // in app/pages/index.vue) rather than a generated one — no renderer
-  // dependency (Chromium/Satori) needed for a one-page static site.
-  ogImage: {
-    enabled: false,
   },
 
   runtimeConfig: {
