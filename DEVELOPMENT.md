@@ -9,7 +9,6 @@ Copy [`.env.example`](.env.example) to `.env`.
 | `NUXT_PUBLIC_ORG_USERNAME` | GitHub organization/user shown on the site |
 | `NUXT_PUBLIC_SITE_URL`     | Canonical deployed URL                     |
 | `NUXT_GITHUB_TOKEN`        | Token for the build-time GitHub fetch      |
-| `NUXT_PINNED_REPOS`        | Optional manual override for pinned repos  |
 
 In production these are set by [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
 

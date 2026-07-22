@@ -72,7 +72,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Server-only — never exposed to the client bundle.
     githubToken: '',
-    pinnedRepos: '',
     public: {
       orgUsername: '',
     },

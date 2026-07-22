@@ -25,12 +25,11 @@ jobs:
     env:
       # Repository/organization variables (Settings → Secrets and variables →
       # Actions → Variables) win when set. Otherwise ORG_USERNAME and SITE_URL
-      # are derived from GitHub itself; PINNED_REPOS is simply left empty,
-      # which makes the site feature GitHub's real pinned repos (or, absent
-      # those, every public repo).
+      # are derived from GitHub itself. Pinned repos always come from the
+      # org's real GitHub pinned items (see server/api/github.get.ts) — no
+      # manual curation to configure.
       NUXT_PUBLIC_ORG_USERNAME: ${{ vars.ORG_USERNAME || github.repository_owner }}
       NUXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL || (github.event.repository.name == format('{0}.github.io', github.repository_owner) && format('https://{0}.github.io', github.repository_owner)) || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
-      NUXT_PINNED_REPOS: ${{ vars.PINNED_REPOS }}
       # GraphQL + REST calls to fetch org/repo data at build time. The
       # automatic per-run GITHUB_TOKEN is enough for public data; set a
       # GH_DATA_TOKEN repo secret (a PAT) to override it if ever needed.
@@ -42,7 +41,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: package.json
           cache: npm
 
       - name: Install dependencies

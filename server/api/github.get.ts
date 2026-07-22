@@ -161,23 +161,10 @@ export default defineEventHandler(async (): Promise<GithubData> => {
   const allRepos = organization.repositories.nodes.map(normalizeRepo)
   const totalStars = allRepos.reduce((sum, repo) => sum + repo.stargazerCount, 0)
 
-  const curatedNames = config.pinnedRepos
-    .split(',')
-    .map((name) => name.trim())
-    .filter(Boolean)
-
-  let pinnedRepos: GithubRepo[]
-  if (curatedNames.length > 0) {
-    pinnedRepos = curatedNames
-      .map((name) => allRepos.find((repo) => repo.name === name))
-      .filter((repo): repo is GithubRepo => Boolean(repo))
-  } else if (organization.pinnedItems.nodes.length > 0) {
-    pinnedRepos = organization.pinnedItems.nodes.map(normalizeRepo)
-  } else {
-    pinnedRepos = [...allRepos]
-      .sort((a, b) => b.stargazerCount - a.stargazerCount)
-      .slice(0, PINNED_LIMIT)
-  }
+  const pinnedRepos: GithubRepo[] =
+    organization.pinnedItems.nodes.length > 0
+      ? organization.pinnedItems.nodes.map(normalizeRepo)
+      : [...allRepos].sort((a, b) => b.stargazerCount - a.stargazerCount).slice(0, PINNED_LIMIT)
 
   const org: GithubOrg = {
     login: organization.login,
