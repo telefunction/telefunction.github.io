@@ -32,6 +32,8 @@ export const texts = {
       stars: 'Total Stars',
       followers: 'Followers',
     },
+    /** Shown for a stat whose value isn't available yet (or failed to load) — never a fake 0. */
+    statUnavailable: '—',
   },
 
   pinned: {

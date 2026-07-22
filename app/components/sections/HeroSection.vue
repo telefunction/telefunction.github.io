@@ -14,12 +14,13 @@ const statusLabel = computed(() => {
 })
 
 const stats = computed(() => [
-  { label: texts.hero.stats.repositories, value: org.value?.publicRepos ?? 0 },
-  { label: texts.hero.stats.stars, value: data.value?.totalStars ?? 0 },
-  { label: texts.hero.stats.followers, value: followers.value ?? 0 },
+  { label: texts.hero.stats.repositories, value: org.value?.publicRepos ?? null },
+  { label: texts.hero.stats.stars, value: data.value?.totalStars ?? null },
+  { label: texts.hero.stats.followers, value: followers.value },
 ])
 
-function formatStat(value: number) {
+function formatStat(value: number | null) {
+  if (value === null) return texts.hero.statUnavailable
   return value >= 1000 ? `${(value / 1000).toFixed(1)}k` : String(value)
 }
 </script>
