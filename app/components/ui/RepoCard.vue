@@ -7,7 +7,7 @@ const props = defineProps<{
   featured?: boolean
 }>()
 
-const updatedLabel = computed(() => relativeTime(props.repo.pushedAt))
+const updatedLabel = useRelativeTime(() => props.repo.pushedAt)
 </script>
 
 <template>

@@ -5,7 +5,8 @@ const { public: publicConfig } = useRuntimeConfig()
 const githubOrgUrl = `https://github.com/${publicConfig.orgUsername}`
 
 const { data } = useGithubDataState()
-const cacheAge = computed(() => (data.value ? relativeTime(data.value.generatedAt) : null))
+const cacheAgeLabel = useRelativeTime(() => data.value?.generatedAt ?? '')
+const cacheAge = computed(() => (data.value ? cacheAgeLabel.value : null))
 
 const year = new Date().getFullYear()
 </script>
