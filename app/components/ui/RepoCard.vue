@@ -11,23 +11,39 @@ const updatedLabel = useRelativeTime(() => props.repo.pushedAt)
 </script>
 
 <template>
-  <a
-    class="group flex h-full flex-col gap-3.5 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-[0_20px_50px_-25px_rgba(20,40,120,0.25)] transition-all duration-300 hover:-translate-y-1 hover:border-blue-600/40 hover:shadow-[0_24px_70px_-20px_rgba(59,130,246,0.25)] dark:border-blue-400/15 dark:bg-slate-900 dark:shadow-[0_20px_60px_-20px_rgba(0,10,60,0.6)] dark:hover:border-blue-400/40 dark:hover:shadow-[0_24px_70px_-20px_rgba(59,130,246,0.45)]"
+  <div
+    class="group relative flex h-full flex-col gap-3.5 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-[0_20px_50px_-25px_rgba(20,40,120,0.25)] transition-all duration-300 hover:-translate-y-1 hover:border-blue-600/40 hover:shadow-[0_24px_70px_-20px_rgba(59,130,246,0.25)] dark:border-blue-400/15 dark:bg-slate-900 dark:shadow-[0_20px_60px_-20px_rgba(0,10,60,0.6)] dark:hover:border-blue-400/40 dark:hover:shadow-[0_24px_70px_-20px_rgba(59,130,246,0.45)]"
     :class="featured ? 'p-7' : ''"
-    :href="repo.htmlUrl"
-    target="_blank"
-    rel="noopener noreferrer"
   >
+    <!-- Pinned cards get a top accent bar instead of competing for space in the header row. -->
+    <span
+      v-if="featured"
+      class="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300"
+    />
+
     <div class="flex items-center gap-2.5 text-blue-600 dark:text-blue-400">
-      <IconRepo width="16" height="16" />
+      <IconRepo width="16" height="16" class="shrink-0" />
       <h3
-        class="overflow-hidden text-ellipsis whitespace-nowrap font-mono text-base font-bold text-slate-950 dark:text-white"
+        class="flex min-w-0 flex-1 items-center gap-1 font-mono text-base font-bold text-slate-950 dark:text-white"
       >
-        {{ repo.name }}
+        <!-- Stretched link: covers the whole card so it's clickable anywhere. -->
+        <a
+          :href="repo.htmlUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex min-w-0 items-center gap-1 after:absolute after:inset-0"
+        >
+          <span class="overflow-hidden text-ellipsis whitespace-nowrap">{{ repo.name }}</span>
+          <IconArrowRight
+            width="12"
+            height="12"
+            class="shrink-0 -translate-x-1 text-blue-600 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 dark:text-blue-400"
+          />
+        </a>
       </h3>
     </div>
 
-    <p class="line-clamp-3 grow text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+    <p class="line-clamp-2 grow text-sm leading-relaxed text-slate-600 dark:text-slate-400">
       {{ repo.description || texts.repoCard.noDescription }}
     </p>
 
@@ -41,24 +57,32 @@ const updatedLabel = useRelativeTime(() => props.repo.pushedAt)
       </li>
     </ul>
 
+    <!-- Never wraps: language/stars/forks stay put (shrink-0), "Updated…"
+         grows/shrinks into whatever's left and truncates with an ellipsis
+         instead of pushing the row onto a second line. -->
     <div
-      class="flex flex-wrap items-center gap-4 border-t border-slate-200 pt-3.5 text-[0.82rem] text-slate-600 dark:border-white/10 dark:text-slate-400"
+      class="flex items-center gap-3 border-t border-slate-200 pt-3.5 text-[0.82rem] text-slate-600 dark:border-white/10 dark:text-slate-400"
     >
-      <span v-if="repo.language" class="inline-flex items-center gap-1.5">
-        <span class="h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-400" />
+      <span v-if="repo.language" class="inline-flex shrink-0 items-center gap-1.5">
+        <span
+          class="h-2 w-2 shrink-0 rounded-full"
+          :style="{ backgroundColor: languageColor(repo.language) }"
+        />
         {{ repo.language }}
       </span>
-      <span class="inline-flex items-center gap-1.5">
+      <span class="inline-flex shrink-0 items-center gap-1.5">
         <IconStar class="text-yellow-500 dark:text-yellow-400" width="16" height="16" />
-        {{ repo.stargazerCount }}
+        {{ formatCount(repo.stargazerCount) }}
       </span>
-      <span class="inline-flex items-center gap-1.5">
+      <span class="inline-flex shrink-0 items-center gap-1.5">
         <IconFork width="14" height="14" />
-        {{ repo.forkCount }}
+        {{ formatCount(repo.forkCount) }}
       </span>
-      <span class="ml-auto font-mono text-[0.75rem] text-slate-400 dark:text-slate-600">
+      <span
+        class="ml-auto min-w-0 flex-1 overflow-hidden text-right font-mono text-[0.75rem] text-ellipsis whitespace-nowrap text-slate-400 dark:text-slate-600"
+      >
         {{ texts.repoCard.updated }} {{ updatedLabel }}
       </span>
     </div>
-  </a>
+  </div>
 </template>
