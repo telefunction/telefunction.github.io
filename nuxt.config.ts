@@ -1,6 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import { THEME_STORAGE_KEY } from './app/config/theme'
-import { BRAND, texts } from './app/config/texts'
+import { texts } from './app/config/texts'
 
 // Applied before Vue mounts to avoid a flash of the wrong theme.
 const themeInitScript = `(function(){var s=localStorage.getItem('${THEME_STORAGE_KEY}');var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();`
@@ -39,7 +39,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      // texts.ts already supplies the full title — skip the default suffix.
+      // Each page supplies its own full title — skip the default suffix.
       titleTemplate: '%s',
       htmlAttrs: { lang: 'en' },
       meta: [
@@ -61,8 +61,14 @@ export default defineNuxtConfig({
   },
 
   site: {
-    name: BRAND,
-    description: texts.meta.description,
+    // The one static reference left: nuxt.config.ts runs at config-resolution
+    // time, before any page/fetch exists, so it can't await the live GitHub
+    // GraphQL name every other component uses (see useBrand()). This name
+    // only drives internal SEO plumbing (sitemap/robots metadata), never
+    // shown to users directly, so the org's account slug — still real GitHub
+    // data, just not the display name — stands in for it here.
+    name: process.env.NUXT_PUBLIC_ORG_USERNAME,
+    description: texts.meta.description(process.env.NUXT_PUBLIC_ORG_USERNAME || ''),
     defaultLocale: 'en',
   },
 

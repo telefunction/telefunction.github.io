@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
-import { BRAND, texts } from './config/texts'
+import { texts } from './config/texts'
 
 defineProps<{ error: NuxtError }>()
 
+// error.vue is prerendered standalone (it's not wrapped by app.vue), so it
+// needs its own fetch to get the live brand name — this triggers it.
+await useGithubData()
+const brand = useBrand()
+
 useSeoMeta({
-  title: `${texts.notFound.eyebrow} — ${BRAND}`,
+  title: `${texts.notFound.eyebrow} — ${brand.value}`,
   description: texts.notFound.message,
   robots: 'noindex',
 })
@@ -23,7 +28,7 @@ useSeoMeta({
       class="inline-flex items-center gap-2.5 font-mono text-base font-bold tracking-tight text-slate-950 dark:text-white"
     >
       <IconLogo width="20" height="20" class="text-blue-600 dark:text-blue-400" />
-      {{ BRAND }}
+      {{ brand }}
     </div>
 
     <div

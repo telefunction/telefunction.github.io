@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BRAND } from '../../config/texts'
+const brand = useBrand()
 </script>
 
 <template>
@@ -12,7 +12,7 @@ import { BRAND } from '../../config/texts'
         class="inline-flex items-center gap-2.5 font-mono text-base font-bold tracking-tight text-slate-950 dark:text-white"
       >
         <IconLogo width="18" height="18" class="text-blue-600 dark:text-blue-400" />
-        {{ BRAND }}
+        {{ brand }}
       </NuxtLink>
 
       <div class="ml-auto flex items-center gap-3">

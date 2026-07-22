@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { BRAND, texts } from '../../config/texts'
+import { texts } from '../../config/texts'
 
 const { public: publicConfig } = useRuntimeConfig()
 const githubOrgUrl = `https://github.com/${publicConfig.orgUsername}`
 
+const brand = useBrand()
 const { data } = useGithubDataState()
 const cacheAgeLabel = useRelativeTime(() => data.value?.generatedAt ?? '')
 const cacheAge = computed(() => (data.value ? cacheAgeLabel.value : null))
@@ -18,7 +19,7 @@ const year = new Date().getFullYear()
     >
       <div>
         <p class="font-mono text-sm font-bold text-slate-950 dark:text-white">
-          {{ BRAND }}
+          {{ brand }}
         </p>
         <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">{{ texts.footer.tagline }}</p>
       </div>
@@ -42,7 +43,7 @@ const year = new Date().getFullYear()
           </span>
           <span v-if="cacheAge">{{ texts.footer.dataCached }} {{ cacheAge }}</span>
         </p>
-        <p class="mt-1">© {{ year }} {{ BRAND }}. {{ texts.footer.rights }}</p>
+        <p class="mt-1">© {{ year }} {{ brand }}. {{ texts.footer.rights }}</p>
       </div>
     </div>
   </footer>

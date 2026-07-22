@@ -1,18 +1,19 @@
 /**
- * Single source of truth for the org/brand name — every other string in this
- * file (and any SEO/meta config that needs it) is derived from it.
- */
-export const BRAND = 'Telefunction'
-
-/**
- * All user-facing copy lives here, separate from components/markup.
- * Also the single source for SEO meta content (see `nuxt.config.ts` and
- * `app/app.vue`).
+ * All user-facing copy lives here, separate from components/markup. Also
+ * the single source for SEO meta content (see `nuxt.config.ts` and
+ * `app/pages/index.vue`).
+ *
+ * No brand name is hardcoded anywhere in this file — `meta.description` is
+ * a function of the brand instead of a fixed string, so every caller
+ * supplies the live name from `useBrand()` (or, in `nuxt.config.ts`, the
+ * org's account slug — the one spot that can't reach live GraphQL data;
+ * see the comment there).
  */
 export const texts = {
   meta: {
-    title: `${BRAND} — Ecosystem`,
-    description: `${BRAND} is a software engineering ecosystem building open-source tools and infrastructure.`,
+    titleSuffix: 'Ecosystem',
+    description: (brand: string) =>
+      `${brand} is a software engineering ecosystem building open-source tools and infrastructure.`,
   },
 
   hero: {
@@ -41,11 +42,19 @@ export const texts = {
     title: 'Repositories',
     subtitle: 'A curated look at the projects we’re most proud of.',
     empty: 'No repositories to feature yet.',
+    viewAll: 'View all repositories',
   },
 
   repoCard: {
     updated: 'Updated',
     noDescription: 'No description provided.',
+  },
+
+  websites: {
+    eyebrow: 'Live',
+    title: 'Project Sites',
+    subtitle: 'Live previews of the sites behind these repositories.',
+    openSite: 'Open site',
   },
 
   states: {

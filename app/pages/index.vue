@@ -1,27 +1,31 @@
 <script setup lang="ts">
-import { BRAND, texts } from '../config/texts'
+import { texts } from '../config/texts'
 
 // app.vue already awaited the fetch, so data/error is settled by now.
+const brand = useBrand()
 const { data } = useGithubDataState()
 const ogImage = data.value?.org.avatarUrl
 const githubUrl = data.value ? `https://github.com/${data.value.org.login}` : undefined
 
+const title = `${brand.value} — ${texts.meta.titleSuffix}`
+const description = texts.meta.description(brand.value)
+
 useSeoMeta({
-  title: texts.meta.title,
-  description: texts.meta.description,
-  ogTitle: texts.meta.title,
-  ogDescription: texts.meta.description,
+  title,
+  description,
+  ogTitle: title,
+  ogDescription: description,
   ogType: 'website',
   ogImage,
   twitterCard: 'summary_large_image',
-  twitterTitle: texts.meta.title,
-  twitterDescription: texts.meta.description,
+  twitterTitle: title,
+  twitterDescription: description,
 })
 
 useSchemaOrg([
   defineOrganization({
-    name: BRAND,
-    description: texts.meta.description,
+    name: brand.value,
+    description,
     logo: ogImage,
     sameAs: githubUrl ? [githubUrl] : [],
   }),
@@ -31,4 +35,5 @@ useSchemaOrg([
 <template>
   <HeroSection />
   <PinnedReposSection />
+  <WebsitesSection />
 </template>

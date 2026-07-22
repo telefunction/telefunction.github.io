@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { BRAND, texts } from '../../config/texts'
+import { texts } from '../../config/texts'
 
 const { public: publicConfig } = useRuntimeConfig()
 const githubOrgUrl = `https://github.com/${publicConfig.orgUsername}`
 
+const brand = useBrand()
 const { data } = useGithubDataState()
 const org = computed(() => data.value?.org ?? null)
 
@@ -20,8 +21,7 @@ const stats = computed(() => [
 ])
 
 function formatStat(value: number | null) {
-  if (value === null) return texts.hero.statUnavailable
-  return value >= 1000 ? `${(value / 1000).toFixed(1)}k` : String(value)
+  return value === null ? texts.hero.statUnavailable : formatCount(value)
 }
 </script>
 
@@ -85,7 +85,7 @@ function formatStat(value: number | null) {
             <span class="h-2 w-2 rounded-full bg-blue-600/60 dark:bg-blue-400/60" />
             <span class="h-2 w-2 rounded-full bg-blue-600/30 dark:bg-blue-400/30" />
             <span class="ml-3 font-mono text-xs text-slate-500 dark:text-slate-500">
-              {{ BRAND.toLowerCase() }}/{{ texts.hero.statusLabel }}
+              {{ publicConfig.orgUsername }}/{{ texts.hero.statusLabel }}
             </span>
           </div>
 
@@ -93,14 +93,14 @@ function formatStat(value: number | null) {
             <img
               v-if="org?.avatarUrl"
               :src="org.avatarUrl"
-              :alt="BRAND"
+              :alt="brand"
               draggable="false"
               class="h-14 w-14 shrink-0 rounded-xl border border-slate-200 select-none dark:border-white/10"
             />
             <div v-else class="h-14 w-14 shrink-0 rounded-xl bg-blue-600/10 dark:bg-blue-400/10" />
             <div>
               <p class="font-mono text-lg font-bold text-slate-950 dark:text-white">
-                {{ BRAND }}
+                {{ brand }}
               </p>
               <p
                 class="mt-1 inline-flex items-center gap-1.5 font-mono text-xs"
