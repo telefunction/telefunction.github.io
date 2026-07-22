@@ -1,7 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
+import { THEME_STORAGE_KEY } from './app/config/theme'
 import { BRAND, texts } from './app/config/texts'
-
-const THEME_STORAGE_KEY = 'telefunction-theme'
 
 // Applied before Vue mounts to avoid a flash of the wrong theme.
 const themeInitScript = `(function(){var s=localStorage.getItem('${THEME_STORAGE_KEY}');var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();`

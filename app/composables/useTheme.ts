@@ -1,7 +1,7 @@
+import { THEME_STORAGE_KEY } from '../config/theme'
+
 export type ThemePreference = 'light' | 'dark' | 'system'
 type ResolvedTheme = 'light' | 'dark'
-
-const STORAGE_KEY = 'telefunction-theme'
 
 // Module-scope singletons: cheap, client-only UI state shared by every
 // consumer (there's one ThemeToggle on the page). Never touched at module
@@ -21,7 +21,7 @@ function applyTheme(theme: ResolvedTheme) {
 
 function setPreference(next: ThemePreference) {
   preference.value = next
-  localStorage.setItem(STORAGE_KEY, next)
+  localStorage.setItem(THEME_STORAGE_KEY, next)
   applyTheme(resolvedTheme.value)
 }
 
@@ -38,7 +38,7 @@ export function useTheme() {
     // The actual theme is already applied pre-hydration by the inline
     // script in nuxt.config.ts (app.head.script) — this just brings Vue's
     // state (icon/label) in sync afterward, avoiding a hydration mismatch.
-    const stored = localStorage.getItem(STORAGE_KEY)
+    const stored = localStorage.getItem(THEME_STORAGE_KEY)
     preference.value =
       stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system'
     systemPrefersDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
