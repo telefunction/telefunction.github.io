@@ -1,7 +1,6 @@
 import type { GithubData, GithubOrg, GithubRepo } from '#shared/types/github'
 
 const GRAPHQL_ENDPOINT = 'https://api.github.com/graphql'
-const REST_BASE = 'https://api.github.com'
 const PINNED_LIMIT = 6
 const REPO_LIMIT = 100
 
@@ -136,24 +135,16 @@ export default defineEventHandler(async (): Promise<GithubData> => {
   }
 
   let graphqlResult: GraphqlResponse
-  let followers: number
 
   try {
-    const [gqlRes, restRes] = await Promise.all([
-      $fetch<GraphqlResponse>(GRAPHQL_ENDPOINT, {
-        method: 'POST',
-        headers,
-        body: {
-          query: QUERY,
-          variables: { login, pinnedLimit: PINNED_LIMIT, repoLimit: REPO_LIMIT },
-        },
-      }),
-      $fetch<{ followers: number }>(`${REST_BASE}/orgs/${login}`, { headers }).catch(() => ({
-        followers: 0,
-      })),
-    ])
-    graphqlResult = gqlRes
-    followers = restRes.followers
+    graphqlResult = await $fetch<GraphqlResponse>(GRAPHQL_ENDPOINT, {
+      method: 'POST',
+      headers,
+      body: {
+        query: QUERY,
+        variables: { login, pinnedLimit: PINNED_LIMIT, repoLimit: REPO_LIMIT },
+      },
+    })
   } catch (error) {
     const status = errorStatus(error)
     throw createError({
@@ -198,7 +189,6 @@ export default defineEventHandler(async (): Promise<GithubData> => {
     location: organization.location,
     createdAt: organization.createdAt,
     publicRepos: organization.repositories.totalCount,
-    followers,
   }
 
   return {

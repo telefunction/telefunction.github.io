@@ -13,7 +13,6 @@ export interface GithubOrg {
   location: string | null
   createdAt: string
   publicRepos: number
-  followers: number
 }
 
 export interface GithubRepo {

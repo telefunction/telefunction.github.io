@@ -7,7 +7,7 @@ const githubOrgUrl = `https://github.com/${publicConfig.orgUsername}`
 const { data } = useGithubDataState()
 const org = computed(() => data.value?.org ?? null)
 
-const { isOnline } = useGithubStatus(publicConfig.orgUsername)
+const { isOnline, followers } = useGithubStatus(publicConfig.orgUsername)
 const statusLabel = computed(() => {
   if (isOnline.value === null) return texts.hero.status.checking
   return isOnline.value ? texts.hero.status.online : texts.hero.status.offline
@@ -16,7 +16,7 @@ const statusLabel = computed(() => {
 const stats = computed(() => [
   { label: texts.hero.stats.repositories, value: org.value?.publicRepos ?? 0 },
   { label: texts.hero.stats.stars, value: data.value?.totalStars ?? 0 },
-  { label: texts.hero.stats.followers, value: org.value?.followers ?? 0 },
+  { label: texts.hero.stats.followers, value: followers.value ?? 0 },
 ])
 
 function formatStat(value: number) {
