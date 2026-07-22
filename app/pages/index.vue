@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { BRAND, texts } from '../config/texts'
 
-// app.vue already awaited the fetch before this page renders, so the data
-// (or error) is guaranteed to be settled here.
+// app.vue already awaited the fetch, so data/error is settled by now.
 const { data } = useGithubDataState()
 const ogImage = data.value?.org.avatarUrl
 const githubUrl = data.value ? `https://github.com/${data.value.org.login}` : undefined

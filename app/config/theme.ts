@@ -1,7 +1,3 @@
-/**
- * localStorage key for the persisted theme preference. Shared between the
- * pre-hydration inline script (`nuxt.config.ts`, avoids a flash of the
- * wrong theme) and `useTheme.ts` (reads/writes it after mount) — a single
- * source so the two can never drift out of sync.
- */
+/** localStorage key for the theme preference — shared by nuxt.config.ts's
+ *  pre-hydration script and useTheme.ts so they can't drift apart. */
 export const THEME_STORAGE_KEY = 'telefunction-theme'

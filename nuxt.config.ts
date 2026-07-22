@@ -9,11 +9,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
   devtools: { enabled: true },
 
-  // Individual SEO modules rather than the `@nuxtjs/seo` meta-package — it
-  // also bundles `nuxt-og-image`, which pulls in `sharp` as a hard (non-
-  // optional) dependency and breaks `npm ci` on CI runners whose platform
-  // doesn't match the lockfile's native-binary selection. We don't use
-  // generated OG images (see `ogImage` meta below), so it's dead weight.
+  // Individual SEO modules, not the `@nuxtjs/seo` meta-package — it also
+  // pulls in nuxt-og-image, which force-installs sharp and broke `npm ci`
+  // on CI. We use the real org avatar as the OG image, so it's dead weight.
   modules: [
     'nuxt-site-config',
     '@nuxtjs/sitemap',
@@ -41,8 +39,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      // texts.ts already supplies the full, brand-inclusive title — skip
-      // the site module's default "%s | SiteName" auto-suffix.
+      // texts.ts already supplies the full title — skip the default suffix.
       titleTemplate: '%s',
       htmlAttrs: { lang: 'en' },
       meta: [

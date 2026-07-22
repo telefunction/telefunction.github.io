@@ -6,12 +6,10 @@ const tick = ref(0)
 let started = false
 
 /**
- * Reactive wrapper around `relativeTime()` (app/utils/relativeTime.ts). A
- * computed built straight from a plain date string only re-evaluates when
- * that string changes — which never happens on a static page — so "3
- * minutes ago" would otherwise freeze at whatever was true on first render
- * until a full reload. This re-evaluates every 60s instead, via a shared
- * interval started client-side on first mount (SSR/prerender-safe).
+ * Reactive wrapper around `relativeTime()` — a plain computed only
+ * re-evaluates when its date input changes, which never happens on a
+ * static page, so labels would freeze until a reload. This re-ticks every
+ * 60s instead, via a shared interval started client-side on first mount.
  */
 export function useRelativeTime(date: MaybeRefOrGetter<string>) {
   onMounted(() => {

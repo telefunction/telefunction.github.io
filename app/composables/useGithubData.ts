@@ -21,10 +21,9 @@ function pendingState() {
 }
 
 /**
- * Mutates already-obtained refs rather than calling useState() again after
- * the `await` — Nuxt's instance context (needed by useState) doesn't survive
- * an await inside a plain async function, only ones the SFC compiler
- * instruments directly in a component's own <script setup>.
+ * Takes already-obtained refs instead of calling useState() again after an
+ * `await` — Nuxt's instance context doesn't survive that outside a
+ * component's own <script setup>.
  */
 async function fetchGithubData(
   data: ReturnType<typeof dataState>,
@@ -45,11 +44,9 @@ async function fetchGithubData(
 }
 
 /**
- * Triggers (and awaits) the build-time GitHub data fetch exactly once —
- * call this only from app.vue, which every other component renders under.
- * Deliberately not `useAsyncData`: calling that with the same key from
- * several components each risks independently re-triggering its own
- * fetch/error state instead of sharing one result.
+ * Triggers (and awaits) the GitHub data fetch exactly once — call only from
+ * app.vue. Not `useAsyncData`: calling that from several components each
+ * risks re-triggering its own fetch instead of sharing one result.
  */
 export async function useGithubData() {
   const data = dataState()

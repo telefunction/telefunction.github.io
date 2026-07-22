@@ -1,14 +1,11 @@
 const CHECK_INTERVAL_MS = 60_000
 
 /**
- * Live health check — deliberately separate from `useGithubData`'s
- * build-time payload. Polls GitHub's public, unauthenticated org endpoint
- * client-side every 60s; a 200 means the API (and by extension the org
- * page) is reachable right now. The same response also carries `followers`
- * — GraphQL's `Organization` type has no such field (verified against
- * GitHub's live schema; only `User` exposes it), so rather than a second,
- * authenticated REST call at build time, this already-live poll owns it —
- * a genuinely current count, refreshed every 60s instead of frozen at build.
+ * Live health check, separate from useGithubData's build-time payload —
+ * polls GitHub's public org endpoint every 60s; a 200 means it's reachable.
+ * Also reads `followers` from the same response: GraphQL's Organization
+ * type has no such field (only User does), so this poll owns it instead of
+ * a second, build-time-only REST call.
  */
 export function useGithubStatus(login: string) {
   const isOnline = ref<boolean | null>(null)

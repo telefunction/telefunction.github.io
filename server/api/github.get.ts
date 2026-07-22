@@ -5,11 +5,10 @@ const PINNED_LIMIT = 6
 const REPO_LIMIT = 100
 
 /**
- * GraphQL is the only GitHub API surface that exposes an org's actual
- * pinned repositories (`pinnedItems`, via the `ProfileOwner` interface) —
- * REST has no equivalent endpoint. `repositories.totalCount`/`nodes` cover
- * the full public repo list (for the star total and the "nothing pinned"
- * fallback) in the same request.
+ * GraphQL is the only API surface exposing an org's real pinned repos
+ * (`pinnedItems`, via `ProfileOwner`) — REST has no equivalent. The
+ * `repositories` connection covers the full public repo list (star total +
+ * "nothing pinned" fallback) in the same request.
  */
 const QUERY = /* GraphQL */ `
   query OrgProfile($login: String!, $pinnedLimit: Int!, $repoLimit: Int!) {

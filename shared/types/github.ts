@@ -1,8 +1,4 @@
-/**
- * Normalized shape produced by `server/api/github.get.ts` (from a hybrid
- * GitHub GraphQL + REST fetch) and consumed by both server and app code —
- * hence living in `shared/`, Nuxt's cross-environment directory.
- */
+/** Produced by `server/api/github.get.ts`, consumed by both server and app code — hence `shared/`. */
 export interface GithubOrg {
   login: string
   name: string | null

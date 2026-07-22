@@ -3,10 +3,8 @@ import { THEME_STORAGE_KEY } from '../config/theme'
 export type ThemePreference = 'light' | 'dark' | 'system'
 type ResolvedTheme = 'light' | 'dark'
 
-// Module-scope singletons: cheap, client-only UI state shared by every
-// consumer (there's one ThemeToggle on the page). Never touched at module
-// load — only inside onMounted below — so importing this file has no
-// browser-API side effects and stays safe under Nuxt's Node-based prerender.
+// Module-scope singletons, shared by every consumer. Only touched inside
+// onMounted below — never at module load — so this stays prerender-safe.
 const preference = ref<ThemePreference>('system')
 const systemPrefersDark = ref(false)
 let initialized = false
@@ -35,9 +33,8 @@ export function useTheme() {
     if (initialized) return
     initialized = true
 
-    // The actual theme is already applied pre-hydration by the inline
-    // script in nuxt.config.ts (app.head.script) — this just brings Vue's
-    // state (icon/label) in sync afterward, avoiding a hydration mismatch.
+    // Theme itself is already applied pre-hydration (nuxt.config.ts's
+    // inline script) — this just syncs Vue's state (icon/label) after mount.
     const stored = localStorage.getItem(THEME_STORAGE_KEY)
     preference.value =
       stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system'

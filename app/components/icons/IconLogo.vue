@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Telefunction mark, used in the header and as the favicon source.
+// Org logo mark — used in the header and the 404 page.
 </script>
 
 <template>
