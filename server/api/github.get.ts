@@ -180,6 +180,7 @@ export default defineEventHandler(async (): Promise<GithubData> => {
   return {
     org,
     pinnedRepos,
+    repos: allRepos,
     totalStars,
     generatedAt: new Date().toISOString(),
   }

@@ -27,6 +27,8 @@ export interface GithubRepo {
 export interface GithubData {
   org: GithubOrg
   pinnedRepos: GithubRepo[]
+  /** Every fetched public repo — the same list `pinnedRepos`/`totalStars` are derived from. */
+  repos: GithubRepo[]
   totalStars: number
   generatedAt: string
 }
