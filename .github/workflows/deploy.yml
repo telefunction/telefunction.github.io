@@ -1,0 +1,74 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Keeps live GitHub data (pinned repos, stars, followers) fresh even
+    # with no commits — the site is static, so this is the only way it
+    # ever refreshes on its own.
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Repository/organization variables (Settings → Secrets and variables →
+      # Actions → Variables) win when set. Otherwise ORG_USERNAME and SITE_URL
+      # are derived from GitHub itself; PINNED_REPOS is simply left empty,
+      # which makes the site feature GitHub's real pinned repos (or, absent
+      # those, every public repo).
+      NUXT_PUBLIC_ORG_USERNAME: ${{ vars.ORG_USERNAME || github.repository_owner }}
+      NUXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL || (github.event.repository.name == format('{0}.github.io', github.repository_owner) && format('https://{0}.github.io', github.repository_owner)) || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
+      NUXT_PINNED_REPOS: ${{ vars.PINNED_REPOS }}
+      # GraphQL + REST calls to fetch org/repo data at build time. The
+      # automatic per-run GITHUB_TOKEN is enough for public data; set a
+      # GH_DATA_TOKEN repo secret (a PAT) to override it if ever needed.
+      NUXT_GITHUB_TOKEN: ${{ secrets.GH_DATA_TOKEN || secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Generate static site
+        run: npm run generate
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .output/public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
