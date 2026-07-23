@@ -11,15 +11,15 @@ export function useGithubStatus(login: string) {
   const isOnline = ref<boolean | null>(null)
   const followers = ref<number | null>(null)
 
-  async function check() {
+  async function checkStatus() {
     try {
       const response = await fetch(`https://api.github.com/orgs/${login}`, {
         headers: { Accept: 'application/vnd.github+json' },
       })
       isOnline.value = response.ok
       if (response.ok) {
-        const data: { followers: number } = await response.json()
-        followers.value = data.followers
+        const body: { followers: number } = await response.json()
+        followers.value = body.followers
       }
     } catch {
       isOnline.value = false
@@ -27,8 +27,8 @@ export function useGithubStatus(login: string) {
   }
 
   onMounted(() => {
-    check()
-    const interval = setInterval(check, CHECK_INTERVAL_MS)
+    checkStatus()
+    const interval = setInterval(checkStatus, CHECK_INTERVAL_MS)
     onUnmounted(() => clearInterval(interval))
   })
 

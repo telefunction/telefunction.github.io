@@ -32,3 +32,5 @@ export interface GithubData {
   totalStars: number
   generatedAt: string
 }
+
+export type GithubRepoWithHomepage = GithubRepo & { homepageUrl: string }

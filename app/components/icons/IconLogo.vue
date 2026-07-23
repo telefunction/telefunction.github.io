@@ -1,7 +1,3 @@
-<script setup lang="ts">
-// Org logo mark — used in the header and the 404 page.
-</script>
-
 <template>
   <svg viewBox="0 0 100 100" aria-hidden="true">
     <path

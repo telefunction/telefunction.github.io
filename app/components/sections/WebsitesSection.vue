@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GithubRepo } from '#shared/types/github'
+import type { GithubRepoWithHomepage } from '#shared/types/github'
 import { texts } from '../../config/texts'
 
 const { data, pending, errorMessage, refresh } = useGithubDataState()
@@ -7,7 +7,7 @@ const { data, pending, errorMessage, refresh } = useGithubDataState()
 // Same fetched payload PinnedReposSection reads — just a different filter
 // over it (repos with a homepage), not a second GitHub request.
 const websiteRepos = computed(() =>
-  (data.value?.repos ?? []).filter((repo): repo is GithubRepo & { homepageUrl: string } =>
+  (data.value?.repos ?? []).filter((repo): repo is GithubRepoWithHomepage =>
     Boolean(repo.homepageUrl),
   ),
 )
@@ -34,7 +34,7 @@ const websiteRepos = computed(() =>
 
       <LoadingState v-if="pending && !data" :rows="3" />
       <ErrorState v-else-if="errorMessage" :message="errorMessage" :on-retry="refresh" />
-      <div v-else class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div v-else class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <WebsitePreviewCard v-for="repo in websiteRepos" :key="repo.name" :repo="repo" />
       </div>
     </div>

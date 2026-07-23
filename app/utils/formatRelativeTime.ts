@@ -10,7 +10,7 @@ const UNITS: { unit: Intl.RelativeTimeFormatUnit; seconds: number }[] = [
 const formatter = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
 
 /** Formats an ISO date string as "3 hours ago", "2 days ago", etc. */
-export function relativeTime(isoDate: string): string {
+export function formatRelativeTime(isoDate: string): string {
   const elapsedSeconds = (Date.now() - new Date(isoDate).getTime()) / 1000
   for (const { unit, seconds } of UNITS) {
     if (elapsedSeconds >= seconds) {

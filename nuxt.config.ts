@@ -61,12 +61,8 @@ export default defineNuxtConfig({
   },
 
   site: {
-    // The one static reference left: nuxt.config.ts runs at config-resolution
-    // time, before any page/fetch exists, so it can't await the live GitHub
-    // GraphQL name every other component uses (see useBrand()). This name
-    // only drives internal SEO plumbing (sitemap/robots metadata), never
-    // shown to users directly, so the org's account slug — still real GitHub
-    // data, just not the display name — stands in for it here.
+    // Runs before any fetch exists, so it can't use the live name from
+    // useBrand() — the org's account slug stands in for this invisible SEO field.
     name: process.env.NUXT_PUBLIC_ORG_USERNAME,
     description: texts.meta.description(process.env.NUXT_PUBLIC_ORG_USERNAME || ''),
     defaultLocale: 'en',

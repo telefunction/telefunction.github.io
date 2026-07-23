@@ -7,7 +7,7 @@ type ResolvedTheme = 'light' | 'dark'
 // onMounted below — never at module load — so this stays prerender-safe.
 const preference = ref<ThemePreference>('system')
 const systemPrefersDark = ref(false)
-let initialized = false
+let isInitialized = false
 
 const resolvedTheme = computed<ResolvedTheme>(() =>
   preference.value === 'system' ? (systemPrefersDark.value ? 'dark' : 'light') : preference.value,
@@ -30,8 +30,8 @@ function cyclePreference() {
 
 export function useTheme() {
   onMounted(() => {
-    if (initialized) return
-    initialized = true
+    if (isInitialized) return
+    isInitialized = true
 
     // Theme itself is already applied pre-hydration (nuxt.config.ts's
     // inline script) — this just syncs Vue's state (icon/label) after mount.

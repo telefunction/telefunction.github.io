@@ -1,14 +1,4 @@
-/**
- * All user-facing copy lives here, separate from components/markup. Also
- * the single source for SEO meta content (see `nuxt.config.ts` and
- * `app/pages/index.vue`).
- *
- * No brand name is hardcoded anywhere in this file — `meta.description` is
- * a function of the brand instead of a fixed string, so every caller
- * supplies the live name from `useBrand()` (or, in `nuxt.config.ts`, the
- * org's account slug — the one spot that can't reach live GraphQL data;
- * see the comment there).
- */
+/** All user-facing copy. `meta.description` takes the brand as a parameter — see `useBrand()`. */
 export const texts = {
   meta: {
     titleSuffix: 'Ecosystem',
@@ -33,7 +23,6 @@ export const texts = {
       stars: 'Total Stars',
       followers: 'Followers',
     },
-    /** Shown for a stat whose value isn't available yet (or failed to load) — never a fake 0. */
     statUnavailable: '—',
   },
 

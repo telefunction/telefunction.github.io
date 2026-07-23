@@ -111,7 +111,7 @@ function normalizeRepo(repo: GraphqlRepo): GithubRepo {
   }
 }
 
-function errorStatus(error: unknown): number | undefined {
+function getErrorStatus(error: unknown): number | undefined {
   return (
     (error as { statusCode?: number; response?: { status?: number } })?.statusCode ??
     (error as { response?: { status?: number } })?.response?.status
@@ -145,7 +145,7 @@ export default defineEventHandler(async (): Promise<GithubData> => {
       },
     })
   } catch (error) {
-    const status = errorStatus(error)
+    const status = getErrorStatus(error)
     throw createError({
       statusCode: status ?? 502,
       statusMessage: status === 403 || status === 429 ? 'rate-limited' : 'upstream-error',
