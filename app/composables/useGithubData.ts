@@ -43,27 +43,29 @@ async function fetchGithubData(
   }
 }
 
+export function useGithubDataState() {
+  const data = dataState()
+  const error = errorState()
+  const pending = pendingState()
+  const errorMessage = computed(() => error.value?.statusMessage ?? null)
+  return {
+    data,
+    error,
+    pending,
+    errorMessage,
+    refresh: () => fetchGithubData(data, error, pending),
+  }
+}
+
 /**
  * Triggers (and awaits) the GitHub data fetch exactly once — call only from
  * app.vue. Not `useAsyncData`: calling that from several components each
  * risks re-triggering its own fetch instead of sharing one result.
  */
 export async function useGithubData() {
-  const data = dataState()
-  const error = errorState()
-  const pending = pendingState()
-  if (data.value === null && error.value === null) {
-    await fetchGithubData(data, error, pending)
+  const state = useGithubDataState()
+  if (state.data.value === null && state.error.value === null) {
+    await fetchGithubData(state.data, state.error, state.pending)
   }
-  const errorMessage = computed(() => error.value?.statusMessage ?? null)
-  return { data, pending, errorMessage, refresh: () => fetchGithubData(data, error, pending) }
-}
-
-/** Reads the already-fetched shared state — safe to call from anywhere. */
-export function useGithubDataState() {
-  const data = dataState()
-  const error = errorState()
-  const pending = pendingState()
-  const errorMessage = computed(() => error.value?.statusMessage ?? null)
-  return { data, pending, errorMessage, refresh: () => fetchGithubData(data, error, pending) }
+  return state
 }
