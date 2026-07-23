@@ -30,7 +30,6 @@ export const texts = {
     eyebrow: 'Open-source',
     title: 'Repositories',
     subtitle: 'A curated look at the projects we’re most proud of.',
-    empty: 'No repositories to feature yet.',
     viewAll: 'View all repositories',
   },
 
