@@ -51,7 +51,7 @@ function formatStat(value: number | null) {
             {{ line }}
             <span
               v-if="index === texts.hero.titleLines.length - 1"
-              class="inline-block h-[0.8em] w-[0.5ch] translate-y-[0.1em] animate-blink bg-blue-600 align-middle dark:bg-blue-400"
+              class="animate-blink inline-block h-[0.8em] w-[0.5ch] translate-y-[0.1em] bg-blue-600 align-middle dark:bg-blue-400"
               aria-hidden="true"
             />
           </span>
@@ -75,7 +75,7 @@ function formatStat(value: number | null) {
           class="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-[0_20px_60px_-20px_rgba(0,10,60,0.15)] dark:border-blue-400/15 dark:bg-slate-900 dark:shadow-[0_20px_60px_-20px_rgba(0,10,60,0.6)]"
         >
           <div
-            class="pointer-events-none absolute inset-x-0 top-0 h-24 animate-scan bg-linear-to-b from-transparent via-blue-500/10 to-transparent"
+            class="animate-scan pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-transparent via-blue-500/10 to-transparent"
           />
 
           <div

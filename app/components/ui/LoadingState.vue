@@ -10,7 +10,7 @@ withDefaults(defineProps<{ rows?: number }>(), { rows: 3 })
       <div
         v-for="i in rows"
         :key="i"
-        class="h-44 animate-shimmer rounded-2xl border border-slate-200 bg-size-[200%_100%] bg-[linear-gradient(100deg,#f8fafc_30%,#e2e8f0_50%,#f8fafc_70%)] dark:border-white/10 dark:bg-[linear-gradient(100deg,#0f172a_30%,#1e293b_50%,#0f172a_70%)]"
+        class="animate-shimmer h-44 rounded-2xl border border-slate-200 bg-[linear-gradient(100deg,#f8fafc_30%,#e2e8f0_50%,#f8fafc_70%)] bg-size-[200%_100%] dark:border-white/10 dark:bg-[linear-gradient(100deg,#0f172a_30%,#1e293b_50%,#0f172a_70%)]"
       />
     </div>
     <p
