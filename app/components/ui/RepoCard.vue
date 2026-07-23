@@ -11,8 +11,9 @@ const updatedLabel = useRelativeTime(() => props.repo.pushedAt)
 </script>
 
 <template>
-  <div
-    class="group relative flex h-full flex-col gap-3.5 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-[0_20px_50px_-25px_rgba(20,40,120,0.25)] transition-all duration-300 hover:-translate-y-1 hover:border-blue-600/40 hover:shadow-[0_24px_70px_-20px_rgba(59,130,246,0.25)] dark:border-blue-400/15 dark:bg-slate-900 dark:shadow-[0_20px_60px_-20px_rgba(0,10,60,0.6)] dark:hover:border-blue-400/40 dark:hover:shadow-[0_24px_70px_-20px_rgba(59,130,246,0.45)]"
+  <BaseCard
+    as="div"
+    class="group relative flex h-full flex-col gap-3.5 overflow-hidden p-6"
     :class="featured ? 'p-7' : ''"
   >
     <!-- Pinned cards get a top accent bar instead of competing for space in the header row. -->
@@ -66,7 +67,7 @@ const updatedLabel = useRelativeTime(() => props.repo.pushedAt)
       <span v-if="repo.language" class="inline-flex shrink-0 items-center gap-1.5">
         <span
           class="h-2 w-2 shrink-0 rounded-full"
-          :style="{ backgroundColor: languageColor(repo.language) }"
+          :style="{ backgroundColor: getLanguageColor(repo.language) }"
         />
         {{ repo.language }}
       </span>
@@ -84,5 +85,5 @@ const updatedLabel = useRelativeTime(() => props.repo.pushedAt)
         {{ texts.repoCard.updated }} {{ updatedLabel }}
       </span>
     </div>
-  </div>
+  </BaseCard>
 </template>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { GithubRepo } from '#shared/types/github'
+import type { GithubRepoWithHomepage } from '#shared/types/github'
 import { texts } from '../../config/texts'
 
-defineProps<{ repo: GithubRepo & { homepageUrl: string } }>()
+defineProps<{ repo: GithubRepoWithHomepage }>()
 
 // Rendered at a fixed "desktop" size, then scaled down to fit the box — a
 // real zoomed-out view of the page, not a squished narrow reflow. The scale
@@ -13,7 +13,7 @@ const PREVIEW_HEIGHT = 810
 
 const previewBox = ref<HTMLDivElement | null>(null)
 const scale = ref(0.25)
-const previewLoaded = ref(false)
+const isPreviewLoaded = ref(false)
 
 onMounted(() => {
   if (!previewBox.value) return
@@ -26,20 +26,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    class="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-[0_20px_50px_-25px_rgba(20,40,120,0.25)] transition-all duration-300 hover:-translate-y-1 hover:border-blue-600/40 hover:shadow-[0_24px_70px_-20px_rgba(59,130,246,0.25)] dark:border-blue-400/15 dark:bg-slate-900 dark:shadow-[0_20px_60px_-20px_rgba(0,10,60,0.6)] dark:hover:border-blue-400/40 dark:hover:shadow-[0_24px_70px_-20px_rgba(59,130,246,0.45)]"
-  >
-    <!-- Purely a preview: no pointer events, lazy-loaded. `allow-same-origin`
-         is needed alongside `allow-scripts` because most JS-rendered sites
-         (SPAs, hydration, storage access on boot) throw and render blank
-         without it — real navigation/popups/forms stay blocked regardless. -->
+  <BaseCard as="div" class="group relative flex flex-col overflow-hidden">
+    <!-- Purely a preview: no pointer events, lazy-loaded. `overscroll-contain`
+         stops any scroll/focus behavior from inside the frame (e.g. a site
+         autofocusing an element on load) from chaining out and scrolling
+         *our* page — needed because most of these sites require JS to
+         render at all, so the sandbox can't drop `allow-scripts`. -->
     <div
       ref="previewBox"
-      class="relative aspect-video overflow-hidden border-b border-slate-200 bg-white dark:border-white/10 dark:bg-slate-950"
+      class="relative aspect-video overflow-hidden overscroll-contain border-b border-slate-200 bg-white dark:border-white/10 dark:bg-slate-950"
     >
       <div
-        v-if="!previewLoaded"
-        class="absolute inset-0 animate-shimmer bg-size-[200%_100%] bg-[linear-gradient(100deg,#f8fafc_30%,#e2e8f0_50%,#f8fafc_70%)] dark:bg-[linear-gradient(100deg,#0f172a_30%,#1e293b_50%,#0f172a_70%)]"
+        v-if="!isPreviewLoaded"
+        class="animate-shimmer absolute inset-0 bg-[linear-gradient(100deg,#f8fafc_30%,#e2e8f0_50%,#f8fafc_70%)] bg-size-[200%_100%] dark:bg-[linear-gradient(100deg,#0f172a_30%,#1e293b_50%,#0f172a_70%)]"
       />
       <iframe
         :src="repo.homepageUrl"
@@ -54,7 +53,7 @@ onMounted(() => {
         tabindex="-1"
         aria-hidden="true"
         class="pointer-events-none absolute top-1/2 left-1/2 border-0"
-        @load="previewLoaded = true"
+        @load="isPreviewLoaded = true"
       />
     </div>
 
@@ -80,5 +79,5 @@ onMounted(() => {
         />
       </a>
     </div>
-  </div>
+  </BaseCard>
 </template>

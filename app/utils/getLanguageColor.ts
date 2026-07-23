@@ -1,5 +1,3 @@
-// GitHub's linguist colors for the languages likely to show up here.
-// Anything unmapped falls back to the site's own brand blue.
 const LANGUAGE_COLORS: Record<string, string> = {
   JavaScript: '#f1e05a',
   TypeScript: '#3178c6',
@@ -23,6 +21,6 @@ const LANGUAGE_COLORS: Record<string, string> = {
 
 const FALLBACK_COLOR = '#3b82f6'
 
-export function languageColor(language: string | null): string {
+export function getLanguageColor(language: string | null): string {
   return (language && LANGUAGE_COLORS[language]) || FALLBACK_COLOR
 }
