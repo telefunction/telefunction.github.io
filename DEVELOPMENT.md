@@ -4,11 +4,11 @@
 
 Copy [`.env.example`](.env.example) to `.env`.
 
-| Variable                   | Purpose                                    |
-| -------------------------- | ------------------------------------------ |
-| `NUXT_PUBLIC_ORG_USERNAME` | GitHub organization/user shown on the site |
-| `NUXT_PUBLIC_SITE_URL`     | Canonical deployed URL                     |
-| `NUXT_GITHUB_TOKEN`        | Token for the build-time GitHub fetch      |
+| Variable                   | Purpose                                                         |
+| -------------------------- | --------------------------------------------------------------- |
+| `NUXT_PUBLIC_ORG_USERNAME` | GitHub organization to fetch (org only, not a personal account) |
+| `NUXT_PUBLIC_SITE_URL`     | Canonical deployed URL                                          |
+| `NUXT_GITHUB_TOKEN`        | Token for the build-time GitHub fetch                           |
 
 In production these are set by [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
 
