@@ -14,14 +14,30 @@ const PREVIEW_HEIGHT = 810
 const previewBox = ref<HTMLDivElement | null>(null)
 const scale = ref(0.25)
 const isPreviewLoaded = ref(false)
+const isPreviewVisible = ref(false)
 
 onMounted(() => {
   if (!previewBox.value) return
-  const observer = new ResizeObserver(([entry]) => {
+  const resizeObserver = new ResizeObserver(([entry]) => {
     if (entry) scale.value = entry.contentRect.width / PREVIEW_WIDTH
   })
-  observer.observe(previewBox.value)
-  onUnmounted(() => observer.disconnect())
+  resizeObserver.observe(previewBox.value)
+  onUnmounted(() => resizeObserver.disconnect())
+
+  // Assigning `src` only once in view — rather than trusting the browser's
+  // native `loading="lazy"` distance threshold — keeps these full external
+  // pages (each with its own JS to parse/execute) from ever touching the
+  // main thread until the visitor actually scrolls to them.
+  const intersectionObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry?.isIntersecting) return
+      isPreviewVisible.value = true
+      intersectionObserver.disconnect()
+    },
+    { rootMargin: '200px' },
+  )
+  intersectionObserver.observe(previewBox.value)
+  onUnmounted(() => intersectionObserver.disconnect())
 })
 </script>
 
@@ -41,6 +57,7 @@ onMounted(() => {
         class="animate-shimmer absolute inset-0 bg-[linear-gradient(100deg,#f8fafc_30%,#e2e8f0_50%,#f8fafc_70%)] bg-size-[200%_100%] dark:bg-[linear-gradient(100deg,#0f172a_30%,#1e293b_50%,#0f172a_70%)]"
       />
       <iframe
+        v-if="isPreviewVisible"
         :src="repo.homepageUrl"
         :title="`Preview of ${repo.name}`"
         :style="{
@@ -48,7 +65,6 @@ onMounted(() => {
           height: `${PREVIEW_HEIGHT}px`,
           transform: `translate(-50%, -50%) scale(${scale})`,
         }"
-        loading="lazy"
         sandbox="allow-scripts allow-same-origin"
         tabindex="-1"
         aria-hidden="true"

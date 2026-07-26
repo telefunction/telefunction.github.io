@@ -12,6 +12,7 @@ node_modules
 .nitro
 .output
 .cache
+.data
 dist
 dist-ssr
 *.local

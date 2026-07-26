@@ -20,7 +20,19 @@ export default defineNuxtConfig({
     'nuxt-seo-utils',
     'nuxt-link-checker',
     '@nuxt/eslint',
+    '@nuxt/fonts',
   ],
+
+  // Self-hosts the two families declared in main.css's @theme block —
+  // explicit here instead of relying on auto-detection, since Tailwind v4
+  // exposes them behind `var(--font-sans)`/`var(--font-mono)` rather than
+  // literal `font-family` values the scanner can pick up on its own.
+  fonts: {
+    families: [
+      { name: 'Inter', provider: 'google', weights: [400, 500, 600, 700, 800] },
+      { name: 'JetBrains Mono', provider: 'google', weights: [400, 500, 600, 700] },
+    ],
+  },
 
   // Subfolders under app/components/ are for organization only, not naming
   // namespaces — keep bare component names (<AppHeader>, not <LayoutAppHeader>).
@@ -47,15 +59,7 @@ export default defineNuxtConfig({
         { name: 'theme-color', media: '(prefers-color-scheme: light)', content: '#ffffff' },
         { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#020617' },
       ],
-      link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap',
-        },
-      ],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
       script: [{ key: 'theme-init', innerHTML: themeInitScript }],
     },
   },

@@ -14,12 +14,17 @@ const websiteRepos = computed(() =>
 </script>
 
 <template>
-  <section v-if="pending || errorMessage || websiteRepos.length" id="websites"
-    class="border-t border-slate-200 py-16 md:py-20 dark:border-white/10">
+  <section
+    v-if="pending || errorMessage || websiteRepos.length"
+    id="websites"
+    class="border-t border-slate-200 py-16 md:py-20 dark:border-white/10"
+  >
     <div class="wrap">
       <div class="mb-10">
         <Eyebrow :label="texts.websites.eyebrow" />
-        <h2 class="mt-2.5 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl dark:text-white">
+        <h2
+          class="mt-2.5 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl dark:text-white"
+        >
           {{ texts.websites.title }}
         </h2>
         <p class="mt-2 max-w-lg text-slate-600 dark:text-slate-400">

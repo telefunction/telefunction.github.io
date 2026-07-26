@@ -33,7 +33,7 @@ const year = new Date().getFullYear()
         github.com/{{ publicConfig.orgUsername }}
       </a>
 
-      <div class="text-left text-xs text-slate-500 sm:text-right dark:text-slate-500">
+      <div class="text-left text-xs text-slate-500 sm:text-right dark:text-slate-400">
         <p class="inline-flex items-center gap-1.5 font-mono">
           <span class="relative flex h-2 w-2">
             <span

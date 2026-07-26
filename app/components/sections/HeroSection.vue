@@ -84,7 +84,7 @@ function formatStat(value: number | null) {
             <span class="h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-400" />
             <span class="h-2 w-2 rounded-full bg-blue-600/60 dark:bg-blue-400/60" />
             <span class="h-2 w-2 rounded-full bg-blue-600/30 dark:bg-blue-400/30" />
-            <span class="ml-3 font-mono text-xs text-slate-500 dark:text-slate-500">
+            <span class="ml-3 font-mono text-xs text-slate-500 dark:text-slate-400">
               {{ publicConfig.orgUsername }}/{{ texts.hero.statusLabel }}
             </span>
           </div>
@@ -92,8 +92,10 @@ function formatStat(value: number | null) {
           <div class="flex items-center gap-4 px-6 pt-6">
             <img
               v-if="org?.avatarUrl"
-              :src="org.avatarUrl"
+              :src="getSizedAvatarUrl(org.avatarUrl, 112)"
               :alt="brand"
+              width="56"
+              height="56"
               draggable="false"
               class="h-14 w-14 shrink-0 rounded-xl border border-slate-200 select-none dark:border-white/10"
             />
@@ -107,7 +109,7 @@ function formatStat(value: number | null) {
                 :class="
                   isOnline
                     ? 'text-blue-600 dark:text-blue-400'
-                    : 'text-slate-500 dark:text-slate-500'
+                    : 'text-slate-500 dark:text-slate-400'
                 "
               >
                 <span class="relative flex h-1.5 w-1.5">
@@ -130,7 +132,7 @@ function formatStat(value: number | null) {
           <dl class="grid grid-cols-3 gap-px px-6 py-6">
             <div v-for="stat in stats" :key="stat.label" class="flex flex-col gap-1">
               <dt
-                class="font-mono text-[0.68rem] tracking-wide text-slate-500 uppercase dark:text-slate-500"
+                class="font-mono text-[0.68rem] tracking-wide text-slate-500 uppercase dark:text-slate-400"
               >
                 {{ stat.label }}
               </dt>

@@ -80,7 +80,7 @@ const updatedLabel = useRelativeTime(() => props.repo.pushedAt)
         {{ formatCount(repo.forkCount) }}
       </span>
       <span
-        class="ml-auto min-w-0 flex-1 overflow-hidden text-right font-mono text-[0.75rem] text-ellipsis whitespace-nowrap text-slate-400 dark:text-slate-600"
+        class="ml-auto min-w-0 flex-1 overflow-hidden text-right font-mono text-[0.75rem] text-ellipsis whitespace-nowrap text-slate-500 dark:text-slate-400"
       >
         {{ texts.repoCard.updated }} {{ updatedLabel }}
       </span>
