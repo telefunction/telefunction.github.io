@@ -40,5 +40,13 @@
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "vue-tsc": "^3.3.5"
+  },
+  "overrides": {
+    "archiver-utils": {
+      "glob": "^13.0.6"
+    },
+    "fontless": {
+      "esbuild": "^0.28.2"
+    }
   }
 }

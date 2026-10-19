@@ -1,89 +1,71 @@
 <script setup lang="ts">
 import type { GithubRepo } from '#shared/types/github'
 import { texts } from '../../config/texts'
-
-const props = defineProps<{
-  repo: GithubRepo
-  featured?: boolean
-}>()
-
+import { REPO_TOPIC_LIMIT } from '../../config/ui'
+const props = defineProps<{ repo: GithubRepo }>()
 const updatedLabel = useRelativeTime(() => props.repo.pushedAt)
 </script>
 
 <template>
-  <BaseCard
-    as="div"
-    class="group relative flex h-full flex-col gap-3.5 overflow-hidden p-6"
-    :class="featured ? 'p-7' : ''"
-  >
-    <!-- Pinned cards get a top accent bar instead of competing for space in the header row. -->
-    <span
-      v-if="featured"
-      class="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300"
-    />
-
-    <div class="flex items-center gap-2.5 text-blue-600 dark:text-blue-400">
-      <IconRepo width="16" height="16" class="shrink-0" />
-      <h3
-        class="flex min-w-0 flex-1 items-center gap-1 font-mono text-base font-bold text-slate-950 dark:text-white"
-      >
-        <!-- Stretched link: covers the whole card so it's clickable anywhere. -->
+  <BaseCard as="div" class="group relative flex h-full flex-col p-6 sm:p-7">
+    <div class="flex items-start gap-3">
+      <IconRepo
+        width="18"
+        height="18"
+        class="mt-0.5 shrink-0 text-slate-400 transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400"
+      />
+      <h3 class="min-w-0 flex-1 font-mono text-base font-semibold tracking-tight break-words">
         <a
           :href="repo.htmlUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex min-w-0 items-center gap-1 after:absolute after:inset-0"
+          class="after:absolute after:inset-0 after:rounded-2xl"
+          >{{ repo.name }}</a
         >
-          <span class="overflow-hidden text-ellipsis whitespace-nowrap">{{ repo.name }}</span>
-          <IconArrowRight
-            width="12"
-            height="12"
-            class="shrink-0 -translate-x-1 text-blue-600 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 dark:text-blue-400"
-          />
-        </a>
       </h3>
+      <IconArrowRight
+        width="17"
+        height="17"
+        class="mt-0.5 shrink-0 -rotate-45 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-blue-600 dark:group-hover:text-blue-400"
+      />
     </div>
-
-    <p class="line-clamp-2 grow text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+    <p class="mt-3 grow text-sm leading-6 text-slate-600 dark:text-slate-400">
       {{ repo.description || texts.repoCard.noDescription }}
     </p>
-
-    <ul v-if="repo.topics.length" class="flex flex-wrap gap-1.5">
+    <ul v-if="repo.topics.length" class="mt-5 flex flex-wrap gap-1.5">
       <li
-        v-for="topic in repo.topics.slice(0, 4)"
+        v-for="topic in repo.topics.slice(0, REPO_TOPIC_LIMIT)"
         :key="topic"
-        class="rounded-full border border-slate-300 px-2.5 py-1 font-mono text-[0.7rem] text-slate-600 dark:border-white/15 dark:text-slate-400"
+        class="rounded-md bg-slate-100 px-2 py-1 font-mono text-[0.65rem] text-slate-500 dark:bg-white/5 dark:text-slate-400"
       >
         {{ topic }}
       </li>
     </ul>
-
-    <!-- Never wraps: language/stars/forks stay put (shrink-0), "Updated…"
-         grows/shrinks into whatever's left and truncates with an ellipsis
-         instead of pushing the row onto a second line. -->
     <div
-      class="flex items-center gap-3 border-t border-slate-200 pt-3.5 text-[0.82rem] text-slate-600 dark:border-white/10 dark:text-slate-400"
+      class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-slate-100 pt-4 text-xs text-slate-500 dark:border-white/10 dark:text-slate-400"
     >
-      <span v-if="repo.language" class="inline-flex shrink-0 items-center gap-1.5">
-        <span
-          class="h-2 w-2 shrink-0 rounded-full"
+      <span v-if="repo.language" class="inline-flex items-center gap-1.5"
+        ><span
+          class="size-2 rounded-full"
           :style="{ backgroundColor: getLanguageColor(repo.language) }"
-        />
-        {{ repo.language }}
-      </span>
-      <span class="inline-flex shrink-0 items-center gap-1.5">
-        <IconStar class="text-yellow-500 dark:text-yellow-400" width="16" height="16" />
-        {{ formatCount(repo.stargazerCount) }}
-      </span>
-      <span class="inline-flex shrink-0 items-center gap-1.5">
-        <IconFork width="14" height="14" />
-        {{ formatCount(repo.forkCount) }}
-      </span>
-      <span
-        class="ml-auto min-w-0 flex-1 overflow-hidden text-right font-mono text-[0.75rem] text-ellipsis whitespace-nowrap text-slate-500 dark:text-slate-400"
+        />{{ repo.language }}</span
       >
-        {{ texts.repoCard.updated }} {{ updatedLabel }}
-      </span>
+      <span
+        class="inline-flex items-center gap-1"
+        :aria-label="`${formatCount(repo.stargazerCount)} ${texts.hero.stats.stars}`"
+        ><IconStar width="14" height="14" />{{ formatCount(repo.stargazerCount) }}</span
+      >
+      <span
+        class="inline-flex items-center gap-1"
+        :aria-label="`${formatCount(repo.forkCount)} ${texts.repoCard.forks}`"
+        ><IconFork width="13" height="13" />{{ formatCount(repo.forkCount) }}</span
+      >
+      <time
+        :datetime="repo.pushedAt"
+        :title="formatAbsoluteDate(repo.pushedAt)"
+        class="ml-auto text-[0.65rem]"
+        >{{ texts.repoCard.updated }} {{ updatedLabel }}</time
+      >
     </div>
   </BaseCard>
 </template>

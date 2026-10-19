@@ -1,0 +1,4 @@
+export const WEBSITE_PREVIEW_WIDTH = 1440
+export const WEBSITE_PREVIEW_HEIGHT = 810
+export const REPO_TOPIC_LIMIT = 4
+export const COPY_FEEDBACK_DURATION_MS = 2500

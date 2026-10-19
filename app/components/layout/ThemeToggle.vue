@@ -14,9 +14,9 @@ const label = computed(() => texts.theme[preference.value])
 
 <template>
   <button
-    class="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-xl border border-slate-300 text-slate-600 transition-all duration-150 hover:border-blue-600 hover:text-blue-600 dark:border-white/15 dark:text-slate-400 dark:hover:border-blue-400 dark:hover:text-blue-400"
+    class="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-slate-300 text-slate-600 transition-all duration-150 hover:border-blue-600 hover:text-blue-600 dark:border-white/15 dark:text-slate-400 dark:hover:border-blue-400 dark:hover:text-blue-400"
     type="button"
-    :aria-label="texts.theme.toggleLabel"
+    :aria-label="`${texts.theme.toggleLabel}: ${label}`"
     :title="`${texts.theme.toggleLabel}: ${label}`"
     @click="cyclePreference"
   >

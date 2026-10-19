@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import type { GithubRepoWithHomepage } from '#shared/types/github'
 import { texts } from '../../config/texts'
-
 const { data, pending, errorMessage, refresh } = useGithubDataState()
-
-// Same fetched payload PinnedReposSection reads — just a different filter
-// over it (repos with a homepage), not a second GitHub request.
 const websiteRepos = computed(() =>
   (data.value?.repos ?? []).filter((repo): repo is GithubRepoWithHomepage =>
     Boolean(repo.homepageUrl),
@@ -14,28 +10,26 @@ const websiteRepos = computed(() =>
 </script>
 
 <template>
-  <section
-    v-if="pending || errorMessage || websiteRepos.length"
-    id="websites"
-    class="border-t border-slate-200 py-16 md:py-20 dark:border-white/10"
-  >
+  <section id="websites" class="border-t border-slate-200 py-16 md:py-24 dark:border-white/10">
     <div class="wrap">
-      <div class="mb-10">
-        <Eyebrow :label="texts.websites.eyebrow" />
-        <h2
-          class="mt-2.5 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl dark:text-white"
-        >
-          {{ texts.websites.title }}
-        </h2>
-        <p class="mt-2 max-w-lg text-slate-600 dark:text-slate-400">
-          {{ texts.websites.subtitle }}
-        </p>
-      </div>
-
+      <SectionHeading
+        number="02"
+        :eyebrow="texts.websites.eyebrow"
+        :title="texts.websites.title"
+        :subtitle="texts.websites.subtitle"
+        :count="websiteRepos.length"
+      />
       <LoadingState v-if="pending && !data" :rows="3" />
       <ErrorState v-else-if="errorMessage" :message="errorMessage" :on-retry="refresh" />
-      <div v-else class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div v-else-if="websiteRepos.length" class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <WebsitePreviewCard v-for="repo in websiteRepos" :key="repo.name" :repo="repo" />
+      </div>
+      <div v-else class="empty-state">
+        <IconMonitor width="32" height="32" class="mb-5 text-blue-600 dark:text-blue-400" />
+        <h3 class="text-xl font-semibold tracking-tight">{{ texts.websites.empty }}</h3>
+        <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          {{ texts.websites.emptyDescription }}
+        </p>
       </div>
     </div>
   </section>
